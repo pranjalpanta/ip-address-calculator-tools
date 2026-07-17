@@ -1,109 +1,59 @@
-# 🌐 IP Address Calculator Tools
+# IP Address Calculator Tools
 
-<p align="center">
-  <img src="screenshot.png" alt="IP Address Calculator" width="900">
-</p>
+IP Address Calculator Tools is a browser-based IPv4 subnet calculator. It helps users understand an IP address and its network information.
 
-<p align="center">
-  A modern IPv4 Address Calculator built with HTML, CSS and JavaScript.
-</p>
+## What This Tool Is Used For
 
-<p align="center">
+This tool is useful for students. Network engineers. System administrators. Cybersecurity learners. And anyone working with IPv4 networks.
 
-![HTML](https://img.shields.io/badge/HTML-5-orange?style=for-the-badge&logo=html5)
-![CSS](https://img.shields.io/badge/CSS-3-blue?style=for-the-badge&logo=css3)
-![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow?style=for-the-badge&logo=javascript)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+It can be used to:
 
-</p>
+- Check whether an IPv4 address is valid.
+- Calculate the subnet mask.
+- Find the network address.
+- Find the broadcast address.
+- Find the usable host range.
+- Calculate the number of usable IP addresses.
+- Identify the IP address class.
+- Identify public. private and loopback addresses.
+- Understand CIDR prefixes.
+- Visualise network bits and host bits.
 
----
-
-## ✨ Features
-
-✅ IPv4 Address Validation
-
-✅ CIDR Notation Support
-
-✅ Automatic IP Class Detection
-
-✅ Public & Private IP Detection
-
-✅ Subnet Mask Calculation
-
-✅ Network Address Calculation
-
-✅ Broadcast Address Calculation
-
-✅ Usable Host Range
-
-✅ Total Usable IPs
-
-✅ Network & Host Bit Visualization
-
-✅ Responsive Design
-
----
-
-## 🚀 Live Demo
-
-> https://YOUR-USERNAME.github.io/ip-address-calculator-tools/
-
----
-
-## 📷 Example
-
-Input
-
-```text
-192.168.1.10/24
-```
-
-Output
-
-```text
-Class            : C
-Type             : Private
-Subnet Mask      : 255.255.255.0
-Network Address  : 192.168.1.0
+## Example Input
+Class: C
+Type: Private
+Subnet Mask: 255.255.255.0
+Network Address: 192.168.1.0
 Broadcast Address: 192.168.1.255
-Host Range       : 192.168.1.1 - 192.168.1.254
-Usable Hosts     : 254
-```
+Usable Host Range: 192.168.1.1 - 192.168.1.254
+Usable IP Addresses: 254
 
----
+## Main Features
+IPv4 address validation.
+CIDR support from /0 to /32.
+IP class detection.
+Public and private IP detection.
+Loopback address detection.
+Subnet mask calculation.
+Network and broadcast address calculation.
+Usable host range calculation.
+Usable IP address calculation.
+Network and host bit visualisation.
+Responsive design.
+Runs fully inside the browser.
 
-## 🛠️ Built With
 
-- HTML5
-- CSS3
-- JavaScript
+## Technologies Used
+HTML
+CSS
+JavaScript
 
----
+Privacy
 
-## ⚡ Run Locally
+All calculations are completed inside the browser.
+No IP address is sent to a server.
+No user information is collected.
 
-```bash
-git clone https://github.com/YOUR-USERNAME/ip-address-calculator-tools.git
-```
 
-```bash
-cd ip-address-calculator-tools
-```
-
-Open **index.html**
-
----
-
-## 👨‍💻 Author
-
-**Prajal Panta**
-
-GitHub: https://github.com/YOUR-USERNAME
-
----
-
-## 📄 License
-
-MIT License
-
+Author
+**Pranjal Panta**
