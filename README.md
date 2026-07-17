@@ -1,54 +1,109 @@
-# IP Address Calculator Tools
+# 🌐 IP Address Calculator Tools
 
-A simple IPv4 subnet calculator built with HTML. CSS and JavaScript.
+<p align="center">
+  <img src="screenshot.png" alt="IP Address Calculator" width="900">
+</p>
 
-## Preview
+<p align="center">
+  A modern IPv4 Address Calculator built with HTML, CSS and JavaScript.
+</p>
 
+<p align="center">
 
+![HTML](https://img.shields.io/badge/HTML-5-orange?style=for-the-badge&logo=html5)
+![CSS](https://img.shields.io/badge/CSS-3-blue?style=for-the-badge&logo=css3)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow?style=for-the-badge&logo=javascript)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-## Features
+</p>
 
-- IPv4 address validation.
-- CIDR support from `/0` to `/32`.
-- IP class detection.
-- Public and private address detection.
-- Subnet mask calculation.
-- Network address calculation.
-- Broadcast address calculation.
-- Usable host range.
-- Usable IP address count.
-- Network and host bit visualisation.
-- Responsive design.
-- Runs fully in the browser.
+---
 
-## Technologies
+## ✨ Features
 
-- HTML.
-- CSS.
-- JavaScript.
+✅ IPv4 Address Validation
 
-## Run Locally
+✅ CIDR Notation Support
 
-Clone the repository.
+✅ Automatic IP Class Detection
+
+✅ Public & Private IP Detection
+
+✅ Subnet Mask Calculation
+
+✅ Network Address Calculation
+
+✅ Broadcast Address Calculation
+
+✅ Usable Host Range
+
+✅ Total Usable IPs
+
+✅ Network & Host Bit Visualization
+
+✅ Responsive Design
+
+---
+
+## 🚀 Live Demo
+
+> https://YOUR-USERNAME.github.io/ip-address-calculator-tools/
+
+---
+
+## 📷 Example
+
+Input
+
+```text
+192.168.1.10/24
+```
+
+Output
+
+```text
+Class            : C
+Type             : Private
+Subnet Mask      : 255.255.255.0
+Network Address  : 192.168.1.0
+Broadcast Address: 192.168.1.255
+Host Range       : 192.168.1.1 - 192.168.1.254
+Usable Hosts     : 254
+```
+
+---
+
+## 🛠️ Built With
+
+- HTML5
+- CSS3
+- JavaScript
+
+---
+
+## ⚡ Run Locally
 
 ```bash
 git clone https://github.com/YOUR-USERNAME/ip-address-calculator-tools.git
 ```
 
-Open the project folder.
-
 ```bash
 cd ip-address-calculator-tools
 ```
 
-Open `index.html` in your browser.
+Open **index.html**
 
-## Live Demo
+---
 
-```text
-https://YOUR-USERNAME.github.io/ip-address-calculator-tools/
-```
+## 👨‍💻 Author
 
-## Author
+**Prajal Panta**
 
-**YOUR NAME:Pranjal Panta**
+GitHub: https://github.com/YOUR-USERNAME
+
+---
+
+## 📄 License
+
+MIT License
+
