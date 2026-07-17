@@ -1,4 +1,4 @@
-# IP Address Calculator Tools
+**IP Address Calculator Tools**
 
 IP Address Calculator Tools is a browser-based IPv4 subnet calculator. It helps users understand an IP address and its network information.
 
@@ -19,7 +19,7 @@ It can be used to:
 - Understand CIDR prefixes.
 - Visualise network bits and host bits.
 
-## Example Input
+**Example Input**
 Class: C
 Type: Private
 Subnet Mask: 255.255.255.0
@@ -28,7 +28,7 @@ Broadcast Address: 192.168.1.255
 Usable Host Range: 192.168.1.1 - 192.168.1.254
 Usable IP Addresses: 254
 
-## Main Features
+**Main Features**
 IPv4 address validation.
 CIDR support from /0 to /32.
 IP class detection.
@@ -43,17 +43,16 @@ Responsive design.
 Runs fully inside the browser.
 
 
-## Technologies Used
+**Technologies Used**
 HTML
 CSS
 JavaScript
 
-Privacy
-
+**Privacy**
 All calculations are completed inside the browser.
 No IP address is sent to a server.
 No user information is collected.
 
 
-Author
+**Author**
 **Pranjal Panta**
