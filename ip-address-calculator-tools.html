@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IP Address Calculator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg: #0a0f1c;
+    --bg-2: #0d1424;
+    --panel: #111a2e;
+    --panel-2: #16223b;
+    --line: #22304d;
+    --line-soft: #1a2540;
+    --text: #eef2fb;
+    --muted: #7c8db3;
+    --muted-dim: #566a8f;
+    --network: #4fd8c4;
+    --network-glow: rgba(79,216,196,0.16);
+    --host: #f5b955;
+    --host-glow: rgba(245,185,85,0.14);
+    --bad: #f47174;
+    --radius: 16px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 10% -10%, rgba(79,216,196,0.10), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 10%, rgba(245,185,85,0.07), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Space Grotesk', sans-serif;
+    min-height:100vh;
+    padding:56px 20px 80px;
+  }
+
+  .wrap{max-width:840px; margin:0 auto;}
+
+  /* ---------- Header ---------- */
+  header{margin-bottom:36px; position:relative;}
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--network);
+    margin:0 0 14px;
+    padding:6px 12px;
+    border:1px solid rgba(79,216,196,0.28);
+    border-radius:999px;
+    background:var(--network-glow);
+  }
+  .eyebrow .pulse{
+    width:6px; height:6px; border-radius:50%;
+    background:var(--network);
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(79,216,196,0.5);}
+    70%{box-shadow:0 0 0 6px rgba(79,216,196,0);}
+    100%{box-shadow:0 0 0 0 rgba(79,216,196,0);}
+  }
+  h1{
+    font-size:clamp(30px, 4.5vw, 42px);
+    margin:0 0 10px;
+    font-weight:700;
+    letter-spacing:-0.02em;
+    line-height:1.1;
+  }
+  h1 .dot-accent{ color:var(--network); }
+  header p{
+    color:var(--muted);
+    margin:0;
+    font-size:15.5px;
+    max-width:52ch;
+    line-height:1.6;
+  }
+  header code{
+    font-family:'JetBrains Mono', monospace;
+    background:var(--panel-2);
+    padding:2px 7px;
+    border-radius:5px;
+    border:1px solid var(--line);
+    font-size:0.9em;
+    color:var(--host);
+  }
+
+  /* ---------- Card shell ---------- */
+  .card{
+    background:linear-gradient(180deg, var(--panel), var(--bg-2));
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:26px;
+    margin-bottom:18px;
+    box-shadow:0 20px 50px -30px rgba(0,0,0,0.6);
+  }
+
+  /* ---------- Input ---------- */
+  .input-card label{
+    display:block;
+    font-size:11.5px;
+    font-weight:600;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:12px;
+  }
+  .input-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .input-shell{
+    flex:1 1 280px;
+    position:relative;
+    display:flex;
+    align-items:center;
+  }
+  .input-shell::before{
+    content:"";
+    position:absolute;
+    left:16px;
+    width:9px; height:9px;
+    border-radius:50%;
+    background:var(--line);
+    transition:background .2s ease;
+    z-index:1;
+  }
+  .input-shell.valid::before{ background:var(--network); }
+  .input-shell.invalid::before{ background:var(--bad); }
+
+  input[type="text"]{
+    width:100%;
+    background:var(--bg-2);
+    border:1.5px solid var(--line);
+    color:var(--text);
+    font-family:'JetBrains Mono', monospace;
+    font-size:18px;
+    padding:15px 16px 15px 36px;
+    border-radius:11px;
+    outline:none;
+    letter-spacing:0.02em;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  input[type="text"]::placeholder{color:#4a5a80;}
+  input[type="text"]:focus{
+    border-color:var(--network);
+    box-shadow:0 0 0 4px var(--network-glow);
+  }
+  input[type="text"].invalid{
+    border-color:var(--bad);
+    box-shadow:0 0 0 4px rgba(244,113,116,0.14);
+  }
+
+  button.primary{
+    background:var(--network);
+    color:#04211c;
+    border:none;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:15px 26px;
+    border-radius:11px;
+    cursor:pointer;
+    transition:transform .12s ease, box-shadow .15s ease, background .15s ease;
+    box-shadow:0 8px 20px -8px rgba(79,216,196,0.5);
+  }
+  button.primary:hover{ background:#6fe6d3; box-shadow:0 10px 24px -8px rgba(79,216,196,0.65); }
+  button.primary:active{ transform:scale(0.97); }
+  button.primary:focus-visible{ outline:2px solid var(--network); outline-offset:3px; }
+
+  .quick-fills{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:14px;
+  }
+  .chip{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--muted);
+    background:var(--bg-2);
+    border:1px solid var(--line-soft);
+    padding:6px 11px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .chip:hover{
+    color:var(--network);
+    border-color:rgba(79,216,196,0.35);
+    background:var(--network-glow);
+  }
+
+  .error-msg{
+    margin-top:12px;
+    font-size:13px;
+    color:var(--bad);
+    font-family:'JetBrains Mono', monospace;
+    display:none;
+    align-items:center;
+    gap:8px;
+  }
+  .error-msg.show{ display:flex; }
+  .error-msg::before{ content:"⚠"; font-size:14px; }
+
+  /* ---------- Empty state ---------- */
+  .empty-state{
+    text-align:center;
+    padding:60px 20px;
+    color:var(--muted);
+  }
+  .empty-state .glyph{
+    font-family:'JetBrains Mono', monospace;
+    font-size:15px;
+    letter-spacing:0.3em;
+    color:var(--line);
+    margin-bottom:16px;
+  }
+  .empty-state p{margin:0; font-size:14.5px;}
+
+  #results{
+    display:none;
+    animation:fadeUp .35s ease both;
+  }
+  #results.show{display:block;}
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(8px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  /* ---------- Class banner ---------- */
+  .class-banner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:16px;
+    padding-bottom:24px;
+    margin-bottom:24px;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .class-badge{
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  .class-letter{
+    font-family:'JetBrains Mono', monospace;
+    font-size:34px;
+    font-weight:700;
+    color:var(--network);
+    line-height:1;
+    width:52px; height:52px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--network-glow);
+    border:1px solid rgba(79,216,196,0.3);
+    border-radius:12px;
+  }
+  .class-desc-wrap .class-title{
+    font-weight:600;
+    font-size:15px;
+    margin-bottom:3px;
+  }
+  .class-desc-wrap .class-desc{
+    font-size:13px;
+    color:var(--muted);
+    font-family:'JetBrains Mono', monospace;
+  }
+  .type-tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:7px 14px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    color:var(--muted);
+    white-space:nowrap;
+  }
+  .type-tag.private{ color:var(--host); border-color:rgba(245,185,85,0.35); background:var(--host-glow); }
+  .type-tag.public{ color:var(--network); border-color:rgba(79,216,196,0.35); background:var(--network-glow); }
+
+  /* ---------- Stats grid ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));
+    gap:12px;
+    margin-bottom:28px;
+  }
+  .stat{
+    background:var(--panel-2);
+    border:1px solid var(--line-soft);
+    border-radius:12px;
+    padding:16px 18px;
+    position:relative;
+    transition:border-color .15s ease;
+  }
+  .stat:hover{ border-color:var(--line); }
+  .stat .label{
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.07em;
+    color:var(--muted);
+    margin-bottom:9px;
+    font-weight:600;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .stat .value{
+    font-family:'JetBrains Mono', monospace;
+    font-size:17px;
+    font-weight:600;
+    word-break:break-all;
+    line-height:1.3;
+  }
+  .stat .value.accent{ color:var(--network); }
+  .stat .value.big{ color:var(--host); font-size:23px; }
+  .copy-btn{
+    background:none;
+    border:none;
+    color:var(--muted);
+    cursor:pointer;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    padding:2px 6px;
+    border-radius:5px;
+    transition:all .15s ease;
+    opacity:0.7;
+  }
+  .copy-btn:hover{ color:var(--network); background:var(--network-glow); opacity:1; }
+  .copy-btn:focus-visible{ outline:1px solid var(--network); }
+
+  /* ---------- Bit visualization ---------- */
+  .bit-section h3{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.07em;
+    color:var(--muted);
+    margin:0 0 16px;
+    font-weight:600;
+  }
+  .octet-row{
+    display:flex;
+    gap:6px;
+    margin-bottom:6px;
+    font-family:'JetBrains Mono', monospace;
+    align-items:center;
+  }
+  .bit{
+    flex:1;
+    text-align:center;
+    padding:9px 0;
+    border-radius:7px;
+    font-size:13px;
+    background:var(--bg-2);
+    color:var(--muted-dim);
+    border:1px solid var(--line-soft);
+    transition:transform .12s ease;
+  }
+  .bit:hover{ transform:translateY(-2px); }
+  .bit.network{ background:var(--network-glow); color:var(--network); border-color:rgba(79,216,196,0.32); }
+  .bit.host{ background:var(--host-glow); color:var(--host); border-color:rgba(245,185,85,0.32); }
+  .octet-label{
+    width:56px;
+    flex:0 0 56px;
+    font-size:12px;
+    color:var(--text);
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    padding-right:8px;
+  }
+  .legend{
+    display:flex;
+    gap:22px;
+    margin-top:16px;
+    font-size:12px;
+    color:var(--muted);
+    font-family:'JetBrains Mono', monospace;
+  }
+  .legend span{display:inline-flex; align-items:center; gap:7px;}
+  .dot{width:10px; height:10px; border-radius:3px; display:inline-block;}
+  .dot.n{background:var(--network);}
+  .dot.h{background:var(--host);}
+
+  footer{
+    text-align:center;
+    color:var(--muted-dim);
+    font-size:12px;
+    margin-top:36px;
+    font-family:'JetBrains Mono', monospace;
+    opacity:0.7;
+  }
+
+  @media (max-width:520px){
+    body{padding:36px 14px 60px;}
+    .card{padding:18px;}
+    .octet-label{width:42px; flex:0 0 42px; font-size:10px;}
+    .bit{font-size:10.5px; padding:7px 0;}
+    .class-banner{align-items:flex-start;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow"><span class="pulse"></span> Network Tools</div>
+    <h1>IP Address Calculator<span class="dot-accent">.</span></h1>
+    <p>Type an IPv4 address to see its class, subnet mask, network range, and usable host count. Add a prefix like <code>/26</code> for custom subnetting.</p>
+  </header>
+
+  <div class="card input-card">
+    <label for="ipInput">IPv4 Address</label>
+    <div class="input-row">
+      <div class="input-shell" id="inputShell">
+        <input type="text" id="ipInput" placeholder="192.168.1.10 or 192.168.1.0/26" autocomplete="off" spellcheck="false">
+      </div>
+      <button class="primary" id="calcBtn">Calculate</button>
+    </div>
+    <div class="quick-fills">
+      <span class="chip" data-fill="192.168.1.10">192.168.1.10</span>
+      <span class="chip" data-fill="10.0.0.5/8">10.0.0.5/8</span>
+      <span class="chip" data-fill="172.16.5.20/20">172.16.5.20/20</span>
+      <span class="chip" data-fill="8.8.8.8">8.8.8.8</span>
+    </div>
+    <div class="error-msg" id="errorMsg"></div>
+  </div>
+
+  <div class="card">
+    <div class="empty-state" id="emptyState">
+      <div class="glyph">· · · . · · · . · · · . · · ·</div>
+      <p>Results will appear here once you enter a valid IPv4 address.</p>
+    </div>
+
+    <div id="results">
+      <div class="class-banner">
+        <div class="class-badge">
+          <div class="class-letter" id="classLetter">A</div>
+          <div class="class-desc-wrap">
+            <div class="class-title" id="classTitle">Class A network</div>
+            <div class="class-desc" id="classDesc">—</div>
+          </div>
+        </div>
+        <div class="type-tag" id="typeTag">Public</div>
+      </div>
+
+      <div class="grid">
+        <div class="stat">
+          <div class="label">Subnet Mask <button class="copy-btn" data-copy="subnetMask">copy</button></div>
+          <div class="value accent" id="subnetMask">—</div>
+        </div>
+        <div class="stat">
+          <div class="label">CIDR Prefix</div>
+          <div class="value" id="cidrPrefix">—</div>
+        </div>
+        <div class="stat">
+          <div class="label">Network Address <button class="copy-btn" data-copy="networkAddr">copy</button></div>
+          <div class="value" id="networkAddr">—</div>
+        </div>
+        <div class="stat">
+          <div class="label">Broadcast Address <button class="copy-btn" data-copy="broadcastAddr">copy</button></div>
+          <div class="value" id="broadcastAddr">—</div>
+        </div>
+        <div class="stat">
+          <div class="label">Usable Host Range</div>
+          <div class="value" id="hostRange">—</div>
+        </div>
+        <div class="stat">
+          <div class="label">Usable IP Addresses</div>
+          <div class="value big" id="usableCount">—</div>
+        </div>
+      </div>
+
+      <div class="bit-section">
+        <h3>Address bits — network vs. host</h3>
+        <div id="bitGrid"></div>
+        <div class="legend">
+          <span><span class="dot n"></span> Network bits</span>
+          <span><span class="dot h"></span> Host bits</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Runs entirely in your browser — no data leaves this page.</footer>
+</div>
+
+<script>
+(function(){
+  const ipInput = document.getElementById('ipInput');
+  const inputShell = document.getElementById('inputShell');
+  const calcBtn = document.getElementById('calcBtn');
+  const errorMsg = document.getElementById('errorMsg');
+  const emptyState = document.getElementById('emptyState');
+  const results = document.getElementById('results');
+
+  function ipToInt(octets){
+    return ((octets[0]<<24) | (octets[1]<<16) | (octets[2]<<8) | octets[3]) >>> 0;
+  }
+  function intToIp(int){
+    return [24,16,8,0].map(shift => (int >>> shift) & 255).join('.');
+  }
+  function intToBinaryOctets(int){
+    const bin = int.toString(2).padStart(32,'0');
+    return [bin.slice(0,8), bin.slice(8,16), bin.slice(16,24), bin.slice(24,32)];
+  }
+
+  function classify(firstOctet){
+    if (firstOctet >= 0 && firstOctet <= 127) return {letter:'A', bits:8, title:'Class A network', desc:'Huge networks — very few of them exist.'};
+    if (firstOctet >= 128 && firstOctet <= 191) return {letter:'B', bits:16, title:'Class B network', desc:'Medium-sized networks.'};
+    if (firstOctet >= 192 && firstOctet <= 223) return {letter:'C', bits:24, title:'Class C network', desc:'Small networks — common for LANs.'};
+    if (firstOctet >= 224 && firstOctet <= 239) return {letter:'D', bits:null, title:'Class D — Multicast', desc:'Reserved for multicast, not host addressing.'};
+    return {letter:'E', bits:null, title:'Class E — Reserved', desc:'Reserved for experimental / future use.'};
+  }
+
+  function isPrivate(octets){
+    const [a,b] = octets;
+    if (a === 10) return true;
+    if (a === 172 && b >= 16 && b <= 31) return true;
+    if (a === 192 && b === 168) return true;
+    if (a === 127) return true;
+    return false;
+  }
+
+  function parseInput(raw){
+    raw = raw.trim();
+    if (!raw) return {error:'Enter an IPv4 address to get started.'};
+
+    let ipPart = raw;
+    let prefixPart = null;
+
+    if (raw.includes('/')){
+      const parts = raw.split('/');
+      if (parts.length !== 2) return {error:'Use only one "/" to separate the address from the prefix, e.g. 192.168.1.0/24.'};
+      ipPart = parts[0].trim();
+      prefixPart = parts[1].trim();
+    }
+
+    const segs = ipPart.split('.');
+    if (segs.length !== 4) return {error:'An IPv4 address needs exactly 4 numbers separated by dots, e.g. 192.168.1.10.'};
+
+    const octets = [];
+    for (const s of segs){
+      if (!/^\d{1,3}$/.test(s)) return {error:'Each part of the address must be a number from 0 to 255.'};
+      const n = parseInt(s, 10);
+      if (n < 0 || n > 255) return {error:'Each part of the address must be between 0 and 255.'};
+      octets.push(n);
+    }
+
+    let prefix = null;
+    if (prefixPart !== null){
+      if (!/^\d{1,2}$/.test(prefixPart)) return {error:'The prefix after "/" must be a number from 0 to 32, e.g. /24.'};
+      prefix = parseInt(prefixPart, 10);
+      if (prefix < 0 || prefix > 32) return {error:'The prefix must be between 0 and 32.'};
+    }
+
+    return {octets, prefix};
+  }
+
+  function render(octets, prefix){
+    const cls = classify(octets[0]);
+    let effectivePrefix = prefix;
+    let usingDefault = false;
+
+    if (effectivePrefix === null){
+      if (cls.bits === null){
+        effectivePrefix = null;
+      } else {
+        effectivePrefix = cls.bits;
+        usingDefault = true;
+      }
+    }
+
+    document.getElementById('classLetter').textContent = cls.letter;
+    document.getElementById('classTitle').textContent = cls.title;
+    document.getElementById('classDesc').textContent = cls.desc;
+
+    const tag = document.getElementById('typeTag');
+    if (isPrivate(octets)){
+      tag.textContent = octets[0] === 127 ? 'Loopback' : 'Private';
+      tag.className = 'type-tag private';
+    } else {
+      tag.textContent = 'Public';
+      tag.className = 'type-tag public';
+    }
+
+    const maskEl = document.getElementById('subnetMask');
+    const cidrEl = document.getElementById('cidrPrefix');
+    const netEl = document.getElementById('networkAddr');
+    const bcEl = document.getElementById('broadcastAddr');
+    const rangeEl = document.getElementById('hostRange');
+    const countEl = document.getElementById('usableCount');
+
+    if (effectivePrefix === null){
+      maskEl.textContent = 'Not applicable';
+      cidrEl.textContent = 'Not applicable';
+      netEl.textContent = 'Not applicable';
+      bcEl.textContent = 'Not applicable';
+      rangeEl.textContent = 'Not applicable';
+      countEl.textContent = '0';
+      document.getElementById('bitGrid').innerHTML = '<p style="color:var(--muted); font-size:13px;">Multicast and reserved addresses do not use conventional subnetting.</p>';
+      return;
+    }
+
+    const maskInt = effectivePrefix === 0 ? 0 : (0xFFFFFFFF << (32 - effectivePrefix)) >>> 0;
+    const ipInt = ipToInt(octets);
+    const netInt = (ipInt & maskInt) >>> 0;
+    const bcInt = (netInt | (~maskInt >>> 0)) >>> 0;
+
+    let usable, firstHost, lastHost;
+    if (effectivePrefix >= 31){
+      usable = effectivePrefix === 32 ? 1 : 2;
+      firstHost = intToIp(netInt);
+      lastHost = intToIp(bcInt);
+    } else {
+      usable = Math.pow(2, 32 - effectivePrefix) - 2;
+      firstHost = intToIp(netInt + 1);
+      lastHost = intToIp(bcInt - 1);
+    }
+
+    maskEl.textContent = intToIp(maskInt) + (usingDefault ? ' (default)' : '');
+    cidrEl.textContent = '/' + effectivePrefix;
+    netEl.textContent = intToIp(netInt);
+    bcEl.textContent = intToIp(bcInt);
+    rangeEl.textContent = firstHost + ' – ' + lastHost;
+    countEl.textContent = usable.toLocaleString();
+
+    renderBits(octets, effectivePrefix);
+  }
+
+  function renderBits(octets, prefix){
+    const ipInt = ipToInt(octets);
+    const binOctets = intToBinaryOctets(ipInt);
+    const grid = document.getElementById('bitGrid');
+    grid.innerHTML = '';
+
+    binOctets.forEach((octetBits, octetIdx) => {
+      const row = document.createElement('div');
+      row.className = 'octet-row';
+
+      const label = document.createElement('div');
+      label.className = 'octet-label';
+      label.textContent = octets[octetIdx];
+      row.appendChild(label);
+
+      octetBits.split('').forEach((bit, bitIdx) => {
+        const globalBitIndex = octetIdx * 8 + bitIdx;
+        const cell = document.createElement('div');
+        cell.className = 'bit ' + (globalBitIndex < prefix ? 'network' : 'host');
+        cell.textContent = bit;
+        row.appendChild(cell);
+      });
+
+      grid.appendChild(row);
+    });
+  }
+
+  function calculate(){
+    const raw = ipInput.value;
+    const parsed = parseInput(raw);
+
+    if (parsed.error){
+      errorMsg.textContent = parsed.error;
+      errorMsg.classList.add('show');
+      inputShell.classList.remove('valid');
+      inputShell.classList.add('invalid');
+      ipInput.classList.add('invalid');
+      results.classList.remove('show');
+      emptyState.style.display = 'block';
+      return;
+    }
+
+    errorMsg.classList.remove('show');
+    inputShell.classList.remove('invalid');
+    inputShell.classList.add('valid');
+    ipInput.classList.remove('invalid');
+    emptyState.style.display = 'none';
+    results.classList.remove('show');
+    void results.offsetWidth; // restart animation
+    results.classList.add('show');
+
+    render(parsed.octets, parsed.prefix);
+  }
+
+  calcBtn.addEventListener('click', calculate);
+  ipInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') calculate();
+  });
+  ipInput.addEventListener('input', () => {
+    if (ipInput.classList.contains('invalid')){
+      ipInput.classList.remove('invalid');
+      inputShell.classList.remove('invalid');
+      errorMsg.classList.remove('show');
+    }
+  });
+
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      ipInput.value = chip.getAttribute('data-fill');
+      calculate();
+      ipInput.focus();
+    });
+  });
+
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-copy');
+      const text = document.getElementById(targetId).textContent;
+      navigator.clipboard.writeText(text.replace(' (default)', '')).then(() => {
+        const original = btn.textContent;
+        btn.textContent = 'copied';
+        setTimeout(() => { btn.textContent = original; }, 1200);
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
